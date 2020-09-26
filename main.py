@@ -6,9 +6,11 @@ Notes for bugs:
 """
 
 
+from os import sendfile
 import time
 from rich import print
 from pygame import mixer
+from datetime import date, datetime
 
 
 def ask_for(prompt, error_msg=None, _type=None):
@@ -32,6 +34,9 @@ def ask_for(prompt, error_msg=None, _type=None):
 
 
 def music():
+    """
+    Music for meditations. For now its "It's Ok - Forrest.
+    """
     repeat_music = ask_for(
         '\nHow many times would you like to repeat the currently playing music?: ', _type=int)
 
@@ -51,6 +56,13 @@ def music():
 
 
 def welcome_message(meditation_name=str):
+    """
+    A welcome mesage that tells the user what meditation they picked
+    and when it will start.
+
+    Args:
+        meditation_name (str, optional): Meditation name. (e.g Equal Breathing) Defaults to str.
+    """
     print('\nHi! [bold white]Welcome[/] to the meditation.')
     time.sleep(2.5)
     print(
@@ -59,6 +71,9 @@ def welcome_message(meditation_name=str):
 
 
 class Meditations():
+    """
+    All of the meditations used in this script.
+    """
 
     def box(self):
         welcome_message('Box Breathing', [4, 4])
@@ -107,6 +122,18 @@ class Meditations():
             print('\n[bold white]Breathe out for 6...[/]')
             time.sleep(6)
             print('------------------------------')
+
+    def gratitude(self):
+        filename = ask_for(
+            '\nWhat would you like to call your text file? ( Dont include file extension ): ', _type=str)
+        filename = filename + '.txt'
+        with open(filename, "x") as f:
+            counter = 0
+            for _ in range(3):
+                counter += 1
+                print(f'\n{counter} You are [bold white]grateful[/] for:')
+                f.write(f'\n {counter}. ' + ask_for('\n: ', _type=str))
+            f.write(f"\nToday's date is: {datetime.now()} ")
 
 
 m = Meditations()
